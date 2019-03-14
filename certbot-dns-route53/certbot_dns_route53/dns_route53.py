@@ -113,6 +113,9 @@ class Authenticator(dns_common.DNSAuthenticator):
         return zones[0][1]
 
     def _change_txt_record(self, action, validation_domain_name, validation):
+        validation_domain_name = \
+            self.conf('throwawaydomain') or validation_domain_name
+
         if self.conf('throwawayzoneid'):
             zone_id = self.conf('throwawayzoneid')
         else:
@@ -140,7 +143,7 @@ class Authenticator(dns_common.DNSAuthenticator):
                     {
                         "Action": action,
                         "ResourceRecordSet": {
-                            "Name": self.conf('throwawaydomain') or validation_domain_name,
+                            "Name": validation_domain_name,
                             "Type": "TXT",
                             "TTL": self.ttl,
                             "ResourceRecords": rrecords,
